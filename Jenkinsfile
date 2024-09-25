@@ -27,7 +27,7 @@ pipeline {
         stage('Running image') {
             steps {
                 script {
-                    // Use 'bat' for Windows
+                    
                     bat "docker run -d --name ${containerName} ${imagename}:latest"
                 }
             }
