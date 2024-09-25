@@ -33,7 +33,7 @@ pipeline {
             }
         }
  
-        stage('Stop and Remove Container (if exists)') {
+        stage('Stop and Remove Container) {
             steps {
                 script {
                     // Using 'bat' for Windows shell commands
