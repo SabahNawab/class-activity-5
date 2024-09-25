@@ -42,7 +42,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         // Using bat for Windows
                         bat """
-                            echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                            docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
                             docker build -t my_app_container .
                             docker tag my_app_container your_dockerhub_username/my_app_container
                             docker push your_dockerhub_username/my_app_container
