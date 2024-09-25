@@ -48,15 +48,22 @@ pipeline {
         }
  
         stage('Deploy Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        
-                        bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
-                        bat "docker push ${imagename}:latest"
-                    }
-                }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                // Docker login
+                sh """
+                    echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
+                """
+
+                // Build and push commands
+                sh """
+                    docker build -t my_app_container .
+                    docker tag my_app_container your_dockerhub_username/my_app_container
+                    docker push your_dockerhub_username/my_app_container
+                """
             }
         }
     }
+}
 }
