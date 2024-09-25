@@ -27,7 +27,7 @@ pipeline {
         stage('Running image') {
             steps {
                 script {
-                    // Use 'bat' for Windows
+                    
                     bat "docker run -d --name ${containerName} ${imagename}:latest"
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Stop and Remove Container (if exists)') {
             steps {
                 script {
-                    // Using 'bat' for Windows shell commands
+                    
                     bat """
                         IF EXIST ${containerName} (
                             docker stop ${containerName} || exit 0
@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Use 'bat' for Windows shell commands
+                        
                         bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
                         bat "docker push ${imagename}:latest"
                     }
