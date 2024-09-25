@@ -40,16 +40,13 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Using bat for Windows
-                        bat """
-                            docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
-                            docker build -t my_app_container .
-                            docker tag my_app_container your_dockerhub_username/my_app_container
-                            docker push your_dockerhub_username/my_app_container
-                        """
+                        bat "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+
+                        bat "docker push ${imagename}:latest"
                     }
                 }
             }
         }
     }
+}
 }
