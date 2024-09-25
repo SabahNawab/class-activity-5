@@ -1,10 +1,9 @@
 pipeline {
-    
     environment {
         imagename = "sabahnawabkhan/activity5"
         dockerImage = ''
         containerName = 'class-activity-container'
-        dockerHubCredentials = 'clasactivityid'
+        dockerHubCredentials = 'clasactivityid' // Replace with your actual credentials ID
     }
   
     agent any
@@ -19,16 +18,7 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build("${imagename}:latest")
-                }
-            }
-        }
- 
-        stage('Running image') {
-            steps {
-                script {
-                    // Use 'bat' for Windows
-                    bat "docker run -d --name ${containerName} ${imagename}:latest"
+                    dockerImage = docker.build "${imagename}:latest"
                 }
             }
         }
@@ -36,7 +26,6 @@ pipeline {
         stage('Stop and Remove Container (if exists)') {
             steps {
                 script {
-                    
                     bat """
                         IF EXIST ${containerName} (
                             docker stop ${containerName} || exit 0
@@ -46,24 +35,21 @@ pipeline {
                 }
             }
         }
- 
-        stage('Deploy Image') {
-    steps {
-        script {
-            withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                // Docker login
-                sh """
-                    echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
-                """
 
-                // Build and push commands
-                sh """
-                    docker build -t my_app_container .
-                    docker tag my_app_container your_dockerhub_username/my_app_container
-                    docker push your_dockerhub_username/my_app_container
-                """
+        stage('Deploy Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Using bat for Windows
+                        bat """
+                            echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                            docker build -t my_app_container .
+                            docker tag my_app_container your_dockerhub_username/my_app_container
+                            docker push your_dockerhub_username/my_app_container
+                        """
+                    }
+                }
             }
         }
     }
-}
 }
