@@ -1,0 +1,75 @@
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    color: #e0e0e0; /* Lighter grey text for readability */
+    background-color: #1b1b1b; /* Dark grey background */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for centering and adding spacing */
+.container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2a2a2a; /* Slightly lighter grey background for content area */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Shadow effect for depth */
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 2px solid #333; /* Dark border */
+}
+
+header h1 {
+    margin: 0;
+    color: #ffffff; /* White color for header text */
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+    color: #d1d1d1; /* Light grey for labels */
+}
+
+input[type="text"],
+select {
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    border: 1px solid #555; /* Dark grey border for input fields */
+    border-radius: 4px;
+    background-color: #333; /* Dark grey background for input fields */
+    color: #e0e0e0; /* Light grey text color for input fields */
+}
+
+/* Button styles */
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff; /* Blue background for buttons */
+    color: #ffffff; /* White text color for buttons */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 10px;
+    border-top: 2px solid #333; /* Dark border */
+    color: #c0c0c0; /* Light grey color for footer text */
+}
