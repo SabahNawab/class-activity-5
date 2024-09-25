@@ -1,4 +1,5 @@
 pipeline {
+    
     environment {
         imagename = "sabahnawabkhan/activity5"
         dockerImage = ''
@@ -18,7 +19,7 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build "${imagename}:latest"
+                    dockerImage = docker.build("${imagename}:latest")
                 }
             }
         }
@@ -26,16 +27,22 @@ pipeline {
         stage('Running image') {
             steps {
                 script {
-                    sh "docker run -d --name ${containerName} ${imagename}:latest"
+                    // Use 'bat' for Windows
+                    bat "docker run -d --name ${containerName} ${imagename}:latest"
                 }
             }
         }
  
-        stage('Stop and Remove Container') {
+        stage('Stop and Remove Container (if exists)') {
             steps {
                 script {
-                    sh "docker stop ${containerName} || true"
-                    sh "docker rm ${containerName} || true"
+                    // Using 'bat' for Windows shell commands
+                    bat """
+                        IF EXIST ${containerName} (
+                            docker stop ${containerName} || exit 0
+                            docker rm ${containerName} || exit 0
+                        )
+                    """
                 }
             }
         }
@@ -44,9 +51,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-
-                        sh "docker push ${imagename}:latest"
+                        // Use 'bat' for Windows shell commands
+                        bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
+                        bat "docker push ${imagename}:latest"
                     }
                 }
             }
