@@ -32,14 +32,20 @@ pipeline {
             }
         }
  
-        stage('Stop and Remove Container') {
-            steps {
-                script {
-                    sh "docker stop ${containerName} || true"
-                    sh "docker rm ${containerName} || true"
-                }
-            }
+        stage('Stop and Remove Container (if exists)') {
+    steps {
+        script {
+           
+            bat """
+                IF EXIST ${containerName} (
+                    docker stop ${containerName} || exit 0
+                    docker rm ${containerName} || exit 0
+                )
+            """
         }
+    }
+}
+
  
         stage('Deploy Image') {
             steps {
