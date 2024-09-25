@@ -3,7 +3,7 @@ pipeline {
         imagename = "sabahnawabkhan/activity5"
         dockerImage = ''
         containerName = 'class-activity-container'
-        dockerHubCredentials = 'clasactivityid' // Replace with your actual credentials ID
+        dockerHubCredentials = 'clasactivityid'
     }
   
     agent any
@@ -23,30 +23,33 @@ pipeline {
             }
         }
  
-        stage('Stop and Remove Container (if exists)') {
+        stage('Running image') {
             steps {
                 script {
-                    bat """
-                        IF EXIST ${containerName} (
-                            docker stop ${containerName} || exit 0
-                            docker rm ${containerName} || exit 0
-                        )
-                    """
+                    sh "docker run -d --name ${containerName} ${imagename}:latest"
                 }
             }
         }
-
+ 
+        stage('Stop and Remove Container') {
+            steps {
+                script {
+                    sh "docker stop ${containerName} || true"
+                    sh "docker rm ${containerName} || true"
+                }
+            }
+        }
+ 
         stage('Deploy Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        bat "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
 
-                        bat "docker push ${imagename}:latest"
+                        sh "docker push ${imagename}:latest"
                     }
                 }
             }
         }
     }
-}
 }
