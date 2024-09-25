@@ -15,9 +15,9 @@ jobs:
               
            
 
-            - name: upload to dockerr
-              run: |
-                docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-                docker build -t my_app_container .
-                docker tag my_app_container ${{ secrets.DOCKER_USERNAME }}/my_app_container
-                docker push ${{ secrets.DOCKER_USERNAME }}/my_app_container
+            # - name: upload to dockerr
+            #   run: |
+            #     docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            #     docker build -t my_app_container .
+            #     docker tag my_app_container ${{ secrets.DOCKER_USERNAME }}/my_app_container
+            #     docker push ${{ secrets.DOCKER_USERNAME }}/my_app_container
